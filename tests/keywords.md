@@ -8,7 +8,7 @@
 - text - Text
     - "Hello", "h"
 - bool - Boolean
-    - True, False, [ $x == 2 ]
+    - True, False, [ $x = 2 ]
 - list:T - List with type T
     - (4, 3, 5), ("Hello", "Hi")
 - param:V - Parameter with Variables V
