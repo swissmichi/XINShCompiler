@@ -1,1 +1,1 @@
-# XINShCompiler
+# XINSh Compiler
