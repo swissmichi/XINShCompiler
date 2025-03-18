@@ -1,0 +1,11 @@
+# File management
+
+if [ -f "file.txt" ]; then
+    cat file.txt
+    cat "Hiiii" >> file.txt
+    cat "Hello" > file.txt
+    cp "file.txt" "hello.txt"
+    mv "hello.txt" "no.txt"
+else
+    echo "File does not exist"
+fi

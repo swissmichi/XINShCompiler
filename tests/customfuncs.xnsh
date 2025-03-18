@@ -1,0 +1,11 @@
+# creating and calling functions 
+function foo {
+	echo "bar"
+}
+
+function bar [msg:str] {
+	echo msg
+}
+
+foo
+bar

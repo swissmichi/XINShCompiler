@@ -1,0 +1,10 @@
+# For loops
+#
+for word in (hello world shell script); do
+    echo "Word: $word"
+done
+
+for i in {1..5}; do
+    echo "i is $i"
+done
+

@@ -1,0 +1,12 @@
+# Control flow
+
+echo "Write a num: "
+read num
+
+text2number $num
+
+if [ $num = 2 ]; then
+	echo "Yup"
+else
+	echo "No"
+fi
