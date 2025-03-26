@@ -2,8 +2,8 @@
 #[cfg(test)]
 mod lexer_tests {
     mod keywords_and_identifiers{
-        use XINSh::lexer;
-        use XINSh::tokens::Token;
+        use XINSh::lexer::lexer;
+        use XINSh::lexer::tokens::Token;
 
         #[test]
         fn lex_single_keywords(){
@@ -62,7 +62,67 @@ mod lexer_tests {
                 Token::Keyword("dir".to_string()),
                 Token::Identifier("dIr".to_string()),
                 Token::Identifier("dIR".to_string())
-            ])
+            ]);
+        }
+    }
+
+    mod literals{
+        use XINSh::lexer::lexer;
+        use XINSh::lexer::tokens::Token;
+
+        #[test]
+        fn single_string_literals(){
+            let source = r#""hello" 'there'"#;
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::StringLiteral("hello".to_string()),
+                Token::StringLiteral("there".to_string())
+            ]);
+        }
+
+        #[test]
+        fn single_num_literals(){
+            let source = "9 000 -893";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::NumLiteral(9),
+                Token::NumLiteral(0),
+                Token::NumLiteral(-893)
+            ]);
+        }
+
+        #[test]
+        fn single_float_literals(){
+            let source = "-8.33 29.100 0.0";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::FloatLiteral(-8.33),
+                Token::FloatLiteral(29.100),
+                Token::FloatLiteral(0.0)
+            ]);
+        }
+
+        #[test]
+        fn single_bool_literals(){
+            let source = "True False";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::BoolLiteral(true),
+                Token::BoolLiteral(false)
+            ]);
+        }
+
+        #[test]
+        fn diff_num_vs_float(){
+            let source = "899 0 0.0 -899.0 -899";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::NumLiteral(899),
+                Token::NumLiteral(0),
+                Token::FloatLiteral(0.0),
+                Token::FloatLiteral(-899.0),
+                Token::NumLiteral(-899)
+            ]);
         }
     }
 }
