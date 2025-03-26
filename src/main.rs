@@ -1,4 +1,5 @@
+use XINSh::lexer::lexer;
 fn main() {
-    println!("TODO")  
+    println!("{:?}", lexer::lex(r#"echo "hello""#.to_string()));
 }
 

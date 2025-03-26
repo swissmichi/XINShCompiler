@@ -124,5 +124,39 @@ mod lexer_tests {
                 Token::NumLiteral(-899)
             ]);
         }
+
+        #[test]
+        fn diff_text_vs_bool(){
+            let source = r#""True" True "False" False"#;
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::StringLiteral("True".to_string()),
+                Token::BoolLiteral(true),
+                Token::StringLiteral("False".to_string()),
+                Token::BoolLiteral(false)
+            ]);
+        }
+
+        #[test]
+        fn diff_string_keyword_identifier(){
+            let source = r#""echo" echo "myvar" myvar "#;
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::StringLiteral("echo".to_string()),
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("myvar".to_string()),
+                Token::Identifier("myvar".to_string())
+            ]);
+        }
+
+        #[test]
+        fn stupid_strings(){
+            let source = r#""it's cool to use this project's lexer" 'I like this "thing"'"#;
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::StringLiteral("it's cool to use this project's lexer".to_string()),
+                Token::StringLiteral(r#"I like this "thing""#.to_string())
+            ]);
+        }
     }
 }
