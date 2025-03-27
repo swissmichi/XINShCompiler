@@ -1,4 +1,3 @@
-// TODO Add more tests
 #[cfg(test)]
 mod lexer_tests {
     mod keywords_and_identifiers{

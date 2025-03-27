@@ -35,6 +35,8 @@ use std::collections::HashSet;
 pub fn lex(source: String) -> Vec<tokens::Token> {
     let mut cursor: usize = 0;
     let mut tokens_vec: Vec<tokens::Token> = Vec::new();
+
+    // List of keywords
     let keywords: HashSet<&str> = ["num", "float", "text", "bool", "list", "range", "function", "param", "return",
     "echo", "read", "num2float", "num2text", "num2bool", "num2list", "num2range", "float2num", "float2text", "float2list",
     "text2num", "text2float", "text2bool", "text2list", "bool2num", "bool2text", "bool2list", "if", "then",
@@ -56,6 +58,11 @@ pub fn lex(source: String) -> Vec<tokens::Token> {
     let re_keyword_identifier = Regex::new(r"^([a-zA-Z_][a-zA-Z0-9_]*)").unwrap();
             
     while cursor < source.len() {
+
+        // For all if statements, the regex gets checked at cursor position, and if it matches, the appropriate token
+        // gets added to the tokens vector and the cursor moves based on the length of the matches
+        // string.
+
         if let Some(token) = re_comment.captures(&source[cursor..]) {
             cursor += token.get(0).unwrap().as_str().len();
             continue;
