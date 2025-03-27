@@ -159,4 +159,332 @@ mod lexer_tests {
             ]);
         }
     }
+
+    mod delims_and_operators{
+        use XINSh::lexer::lexer;
+        use XINSh::lexer::tokens::Token;
+
+        #[test]
+        fn single_operators(){
+            let source = "+ - = *";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::Operator("+".to_string()),
+                Token::Operator("-".to_string()),
+                Token::Operator("=".to_string()),
+                Token::Operator("*".to_string())
+            ]);
+        }
+
+        #[test]
+        fn single_delims(){
+            let source = r"[[ , ; : { [ ( )]]";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::Delim("[[".to_string()),
+                Token::Delim(",".to_string()),
+                Token::Delim(";".to_string()),
+                Token::Delim(":".to_string()),
+                Token::Delim(r"{".to_string()),
+                Token::Delim("[".to_string()),
+                Token::Delim("(".to_string()),
+                Token::Delim(")".to_string()),
+                Token::Delim("]]".to_string())
+            ]);
+        }
+
+        #[test]
+        fn mixed_delims_and_operators(){
+            let source = r"{ / = << >> > % }}";
+            let tokens = lexer::lex(source.to_string());
+            assert_eq!(tokens, vec![
+                Token::Delim(r"{".to_string()),
+                Token::Operator("/".to_string()),
+                Token::Operator("=".to_string()),
+                Token::Operator("<".to_string()),
+                Token::Operator("<".to_string()),
+                Token::Operator(">>".to_string()),
+                Token::Operator(">".to_string()),
+                Token::Operator("%".to_string()),
+                Token::Delim("}".to_string()),
+                Token::Delim("}".to_string())
+            ]);
+        }
+    }
+
+    mod real_source_code{
+        use std::fs;
+        use XINSh::lexer::lexer;
+        use XINSh::lexer::tokens::Token;
+
+        #[test]
+        fn simple_io(){
+            let source = fs::read_to_string("./tests/source-examples/simpleIO.xnsh").expect("File should exist");
+            let tokens = lexer::lex(source);
+            assert_eq!(tokens, vec![
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral(r"Hello, World\n".to_string()),
+
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("Enter your name: ".to_string()),
+
+                Token::Keyword("read".to_string()),
+                Token::Identifier("name".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("name".to_string()),
+
+
+                Token::Identifier("x".to_string()),
+                Token::Operator("=".to_string()),
+                Token::NumLiteral(9),
+
+                Token::Identifier("y".to_string()),
+                Token::Operator("=".to_string()),
+                Token::FloatLiteral(9.0),
+
+                Token::Identifier("z".to_string()),
+                Token::Operator("=".to_string()),
+                Token::BoolLiteral(true),
+
+
+                Token::Keyword("echo".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("x".to_string()),
+
+
+                Token::Keyword("echo".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("y".to_string()),
+
+
+                Token::Keyword("echo".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("z".to_string())
+            ]);
+        }
+
+        #[test]
+        fn ctrl_flow(){
+            let source = fs::read_to_string("./tests/source-examples/ctrlFlow.xnsh").expect("File should exist");
+            let tokens = lexer::lex(source);
+            assert_eq!(tokens, vec![
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("Write a num: ".to_string()),
+
+                Token::Keyword("read".to_string()),
+                Token::Identifier("innum".to_string()),
+
+
+                Token::Keyword("text2num".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("innum".to_string()),
+
+
+                Token::Keyword("if".to_string()),
+                Token::Delim("[".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("innum".to_string()),
+                Token::Operator("=".to_string()),
+                Token::NumLiteral(2),
+                Token::Delim("]".to_string()),
+                Token::Delim(";".to_string()),
+                Token::Keyword("then".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("Yup".to_string()),
+                
+                Token::Keyword("else".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("No".to_string()),
+
+                Token::Keyword("fi".to_string())
+            ]);
+        }
+
+        #[test]
+        fn while_loops(){
+            let source = fs::read_to_string("./tests/source-examples/whileloop.xnsh").expect("File should exist");
+            let tokens = lexer::lex(source);
+            assert_eq!(tokens, vec![
+                Token::Identifier("x".to_string()),
+                Token::Operator("=".to_string()),
+                Token::NumLiteral(1),
+
+                Token::Keyword("while".to_string()),
+                Token::Delim("[".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("x".to_string()),
+                Token::Operator(">".to_string()),
+                Token::NumLiteral(5),
+                Token::Delim("]".to_string()),
+                Token::Delim(";".to_string()),
+                Token::Keyword("do".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("x is ".to_string()),
+                Token::Operator("+".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("x".to_string()),
+
+                Token::Identifier("x".to_string()),
+                Token::Operator("=".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("x".to_string()),
+                Token::Operator("+".to_string()),
+                Token::NumLiteral(1),
+
+                Token::Keyword("done".to_string())
+            ]);
+        }
+
+        #[test]
+        fn for_loops(){
+            let source = fs::read_to_string("./tests/source-examples/forloop.xnsh").expect("File should exist");
+            let tokens = lexer::lex(source);
+            assert_eq!(tokens, vec![
+                Token::Keyword("for".to_string()),
+                Token::Identifier("word".to_string()),
+                Token::Keyword("in".to_string()),
+                Token::Delim("(".to_string()),
+                Token::StringLiteral("hello".to_string()),
+                Token::Delim(",".to_string()),
+                Token::StringLiteral("world".to_string()),
+                Token::Delim(",".to_string()),
+                Token::StringLiteral("shell".to_string()),
+                Token::Delim(",".to_string()),
+                Token::StringLiteral("script".to_string()),
+                Token::Delim(")".to_string()),
+                Token::Delim(";".to_string()),
+                Token::Keyword("do".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("Word: ".to_string()),
+                Token::Operator("+".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("word".to_string()),
+
+                Token::Keyword("done".to_string()),
+
+                Token::Keyword("for".to_string()),
+                Token::Identifier("i".to_string()),
+                Token::Keyword("in".to_string()),
+                Token::Delim("{".to_string()),
+                Token::NumLiteral(1),
+                Token::Operator("..".to_string()),
+                Token::NumLiteral(5),
+                Token::Delim("}".to_string()),
+                Token::Delim(";".to_string()),
+                Token::Keyword("do".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("i is ".to_string()),
+                Token::Operator("+".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("i".to_string()),
+
+                Token::Keyword("done".to_string())
+            ]);
+        }
+        
+        #[test]
+        fn functions(){
+            let source = fs::read_to_string("./tests/source-examples/customfuncs.xnsh").expect("File should exist");
+            let tokens = lexer::lex(source);
+            assert_eq!(tokens, vec![
+                Token::Keyword("function".to_string()),
+                Token::Identifier("foo".to_string()),
+                Token::Delim(r"{".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("bar".to_string()),
+
+                Token::Delim(r"}".to_string()),
+
+
+                Token::Keyword("function".to_string()),
+                Token::Identifier("bar".to_string()),
+                Token::Delim("[[".to_string()),
+                Token::Identifier("msg".to_string()),
+                Token::Delim(":".to_string()),
+                Token::Keyword("text".to_string()),
+                Token::Delim("]]".to_string()),
+                Token::Delim(r"{".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::Operator("$".to_string()),
+                Token::Identifier("msg".to_string()),
+
+                Token::Delim(r"}".to_string()),
+
+
+                Token::Identifier("foo".to_string()),
+                
+                Token::Identifier("bar".to_string()),
+                Token::Delim("[[".to_string()),
+                Token::StringLiteral("hi".to_string()),
+                Token::Delim("]]".to_string())
+            ]);
+        }
+        
+        #[test]
+        fn file_managment(){
+            let source = fs::read_to_string("./tests/source-examples/file.xnsh").expect("File should exist");
+            let tokens = lexer::lex(source);
+            assert_eq!(tokens, vec![
+                Token::Keyword("if".to_string()),
+                Token::Delim("[".to_string()),
+                Token::Keyword("file".to_string()),
+                Token::StringLiteral("file.txt".to_string()),
+                Token::Delim("]".to_string()),
+                Token::Delim(";".to_string()),
+                Token::Keyword("then".to_string()),
+
+                Token::Keyword("cat".to_string()),
+                Token::StringLiteral("file.txt".to_string()),
+               
+                Token::Keyword("cat".to_string()),
+                Token::StringLiteral("Hiiii".to_string()),
+                Token::Operator(">>".to_string()),
+                Token::StringLiteral("file.txt".to_string()),
+                
+                Token::Keyword("cat".to_string()),
+                Token::StringLiteral("Hello".to_string()),
+                Token::Operator(">".to_string()),
+                Token::StringLiteral("file.txt".to_string()),
+
+                Token::Keyword("cp".to_string()),
+                Token::StringLiteral("file.txt".to_string()),
+                Token::StringLiteral("hello.txt".to_string()),
+
+                Token::Keyword("mv".to_string()),
+                Token::StringLiteral("hello.txt".to_string()),
+                Token::StringLiteral("no.txt".to_string()),
+
+                Token::Keyword("else".to_string()),
+
+                Token::Keyword("echo".to_string()),
+                Token::StringLiteral("File does not exist".to_string()),
+
+                Token::Keyword("fi".to_string())
+
+            ]);
+        }
+
+        #[test]
+        fn shell(){
+           let source = fs::read_to_string("./tests/source-examples/sh.xnsh").expect("File should exist");
+           let tokens = lexer::lex(source);
+           assert_eq!(tokens, vec![
+               Token::Keyword("command".to_string()),
+               Token::StringLiteral("ls".to_string()),
+               
+               Token::Keyword("command".to_string()),
+               Token::StringLiteral(r#"echo "Hello""#.to_string())
+           ]);
+        }
+    }
 }

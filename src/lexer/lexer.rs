@@ -2,7 +2,7 @@ use super::tokens;
 use regex::Regex;
 use std::collections::HashSet;
 
-/// Lexing a string source code into strings
+/// Lexing a string into tokens
 ///
 /// # Example
 /// ```
@@ -11,6 +11,14 @@ use std::collections::HashSet;
 /// let result = lexer::lex(r#"echo "Hello, world""#.to_string());
 /// assert_eq!(result, vec![Token::Keyword("echo".to_string()), Token::StringLiteral("Hello, world".to_string())]);
 /// ```
+///
+/// # Arguments
+///
+/// 'source' - source code as string (not str)
+///
+/// # Returns
+///
+/// lex() retunrs a vector of tokens.
 ///
 /// # Panics
 ///
@@ -23,19 +31,20 @@ use std::collections::HashSet;
 /// # Safety
 ///
 /// This function is safe
+///
 pub fn lex(source: String) -> Vec<tokens::Token> {
     let mut cursor: usize = 0;
     let mut tokens_vec: Vec<tokens::Token> = Vec::new();
-    let keywords: HashSet<&str> = ["num", "float", "text", "bool", "list", "range", "func", "param", "return",
+    let keywords: HashSet<&str> = ["num", "float", "text", "bool", "list", "range", "function", "param", "return",
     "echo", "read", "num2float", "num2text", "num2bool", "num2list", "num2range", "float2num", "float2text", "float2list",
     "text2num", "text2float", "text2bool", "text2list", "bool2num", "bool2text", "bool2list", "if", "then",
-    "else", "for", "while", "do", "done", "in", "dir", "file", "cat", "cp", "mv", "command"]
+    "else", "for", "while", "do", "done", "in", "dir", "file", "cat", "cp", "mv", "command", "fi"]
         .iter().cloned().collect();
 
     let re_comment = Regex::new(r"^#.*\n").unwrap();
     let re_whitespace = Regex::new(r"\s+").unwrap();
     let re_delim = Regex::new(r#"^(\[{1,2}|\]{1,2}|\(|\)|\{|\}|,|:|;)"#).unwrap();
-    let re_operator = Regex::new(r"^(=|\+|\-|/|\*|<|>|\$)").unwrap();
+    let re_operator = Regex::new(r"^(=|\+|\-|/|\*|<|>{1,2}|\$|%|\.\.)").unwrap();
     
     let re_num_lit = Regex::new(r"^(-?[0-9]+)").unwrap();
     let re_float_lit = Regex::new(r"^(-?[0-9]+\.[0-9]+)").unwrap();

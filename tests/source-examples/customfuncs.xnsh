@@ -3,9 +3,9 @@ function foo {
 	echo "bar"
 }
 
-function bar [msg:str] {
-	echo msg
+function bar [[msg:text]] {
+	echo $msg
 }
 
 foo
-bar
+bar [["hi"]]

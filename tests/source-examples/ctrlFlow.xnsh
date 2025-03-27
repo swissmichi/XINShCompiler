@@ -1,11 +1,11 @@
 # Control flow
 
 echo "Write a num: "
-read num
+read innum
 
-text2number $num
+text2num $innum
 
-if [ $num = 2 ]; then
+if [ $innum = 2 ]; then
 	echo "Yup"
 else
 	echo "No"
