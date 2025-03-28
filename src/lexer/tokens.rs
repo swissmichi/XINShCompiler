@@ -19,6 +19,5 @@ pub enum Token {
     // Other
 
     Keyword(String),
-    Identifier(String),
-    MalformedChar,
+    Identifier(String)
 }

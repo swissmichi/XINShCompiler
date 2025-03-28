@@ -139,9 +139,6 @@ pub fn lex(source: String) -> Vec<tokens::Token> {
             cursor += token.get(0).unwrap().as_str().len();
             continue;
         }
-        tokens_vec.push(tokens::Token::MalformedChar);
-        cursor += 1;
-        continue;
     }
     tokens_vec
 }
