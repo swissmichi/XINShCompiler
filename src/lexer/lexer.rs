@@ -6,8 +6,8 @@ use std::collections::HashSet;
 ///
 /// # Example
 /// ```
-/// use XINSh::lexer::tokens::Token;
-/// use XINSh::lexer::lexer;
+/// use xinsh::lexer::tokens::Token;
+/// use xinsh::lexer::lexer;
 /// let result = lexer::lex(r#"echo "Hello, world""#.to_string());
 /// assert_eq!(result, vec![Token::Keyword("echo".to_string()), Token::StringLiteral("Hello, world".to_string())]);
 /// ```
@@ -43,7 +43,7 @@ pub fn lex(source: String) -> Vec<tokens::Token> {
     "else", "for", "while", "do", "done", "in", "dir", "file", "cat", "cp", "mv", "command", "fi"]
         .iter().cloned().collect();
 
-    let re_comment = Regex::new(r"^#.*\n").unwrap();
+    let re_comment = Regex::new(r"^#.*\n").unwrap(); 
     let re_whitespace = Regex::new(r"\s+").unwrap();
     let re_delim = Regex::new(r#"^(\[{1,2}|\]{1,2}|\(|\)|\{|\}|,|:|;)"#).unwrap();
     let re_operator = Regex::new(r"^(=|\+|\-|/|\*|<|>{1,2}|\$|%|\.\.)").unwrap();

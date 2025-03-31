@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod lexer_tests {
     mod keywords_and_identifiers{
-        use XINSh::lexer::lexer;
-        use XINSh::lexer::tokens::Token;
+        use xinsh::lexer::lexer;
+        use xinsh::lexer::tokens::Token;
 
         #[test]
         fn lex_single_keywords(){
@@ -66,8 +66,8 @@ mod lexer_tests {
     }
 
     mod literals{
-        use XINSh::lexer::lexer;
-        use XINSh::lexer::tokens::Token;
+        use xinsh::lexer::lexer;
+        use xinsh::lexer::tokens::Token;
 
         #[test]
         fn single_string_literals(){
@@ -160,8 +160,8 @@ mod lexer_tests {
     }
 
     mod delims_and_operators{
-        use XINSh::lexer::lexer;
-        use XINSh::lexer::tokens::Token;
+        use xinsh::lexer::lexer;
+        use xinsh::lexer::tokens::Token;
 
         #[test]
         fn single_operators(){
@@ -213,8 +213,8 @@ mod lexer_tests {
 
     mod real_source_code{
         use std::fs;
-        use XINSh::lexer::lexer;
-        use XINSh::lexer::tokens::Token;
+        use xinsh::lexer::lexer;
+        use xinsh::lexer::tokens::Token;
 
         #[test]
         fn simple_io(){
