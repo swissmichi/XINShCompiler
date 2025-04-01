@@ -34,10 +34,10 @@ use std::collections::HashSet;
 ///
 pub fn lex(source: String) -> Vec<tokens::Token> {
     let mut cursor: usize = 0;
-    let mut tokens_vec: Vec<tokens::Token> = Vec::new();
+let mut tokens_vec: Vec<tokens::Token> = Vec::new();
 
     // List of keywords
-    let keywords: HashSet<&str> = ["num", "float", "text", "bool", "list", "range", "function", "param", "return",
+let keywords: HashSet<&str> = ["num", "float", "text", "bool", "list", "range", "function", "param", "return",
     "echo", "read", "num2float", "num2text", "num2bool", "num2list", "num2range", "float2num", "float2text", "float2list",
     "text2num", "text2float", "text2bool", "text2list", "bool2num", "bool2text", "bool2list", "if", "then",
     "else", "for", "while", "do", "done", "in", "dir", "file", "cat", "cp", "mv", "command", "fi"]
@@ -58,86 +58,90 @@ pub fn lex(source: String) -> Vec<tokens::Token> {
     let re_keyword_identifier = Regex::new(r"^([a-zA-Z_][a-zA-Z0-9_]*)").unwrap();
             
     while cursor < source.len() {
+        
+        let result = match &source[cursor..] {
+           
+            s if re_comment.is_match(s) => { None }
+            
+            s if re_delim.is_match(s) => {
+                let captures = re_delim.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::Delim(value), length))
+            },
 
-        // For all if statements, the regex gets checked at cursor position, and if it matches, the appropriate token
-        // gets added to the tokens vector and the cursor moves based on the length of the matches
-        // string.
+            s if re_float_lit.is_match(s) => {
+                let captures = re_float_lit.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::FloatLiteral(value.parse::<f32>().unwrap()), length))
+            },
 
-        if let Some(token) = re_comment.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            continue;
-        }
-        if let Some(token) = re_delim.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            tokens_vec.push(tokens::Token::Delim(
-                    token.get(1).unwrap().as_str().to_string()
-            ));
-            continue;
-        }
-        if let Some(token) = re_float_lit.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            tokens_vec.push(tokens::Token::FloatLiteral(
-                    token.get(1).unwrap().as_str()
-                    .parse::<f32>().expect("Should have been a float"),
-            ));
-            continue;
-            } 
-        if let Some(token) = re_num_lit.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            tokens_vec.push(tokens::Token::NumLiteral(
-                    token.get(1).unwrap().as_str()
-                    .parse::<i32>().expect("Should have been an integer"),
-            ));
-            continue;
-        }
-        if let Some(token) = re_operator.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            tokens_vec.push(tokens::Token::Operator(
-                    token.get(1).unwrap().as_str().to_string()
-            ));
-            continue;
-        }
+            s if re_num_lit.is_match(s) => {
+                let captures = re_num_lit.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::NumLiteral(value.parse::<i32>().unwrap()), length))
+            },
 
-        if let Some(token) = re_single_string.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            tokens_vec.push(tokens::Token::StringLiteral(
-                token.get(1).unwrap().as_str().to_string()
-            ));
-            continue;
-        }
-        if let Some(token) = re_bool_lit.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            match token.get(1).unwrap().as_str() {
-                "True" => tokens_vec.push(tokens::Token::BoolLiteral(true)),
-                "False" => tokens_vec.push(tokens::Token::BoolLiteral(false)),
-                _ => panic!("Should have been a bool"),
+            s if re_operator.is_match(s) => {
+                let captures = re_operator.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::Operator(value), length))
+            },
+
+            s if re_single_string.is_match(s) => {
+                let captures = re_single_string.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::StringLiteral(value), length))
+            },
+
+            s if re_double_string.is_match(s) => {
+                let captures = re_double_string.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::StringLiteral(value), length))
+            },
+
+            s if re_bool_lit.is_match(s) => {
+                let captures = re_bool_lit.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str().to_string();
+                let length = captures.get(0).unwrap().as_str().len();
+                Some((tokens::Token::BoolLiteral(value == "True"), length))
+            },
+
+            s if re_keyword_identifier.is_match(s) => {
+                let captures = re_keyword_identifier.captures(s).unwrap();
+                let value = captures.get(1).unwrap().as_str();
+                let length = captures.get(0).unwrap().as_str().len();
+                if keywords.contains(value) {
+                    Some((tokens::Token::Keyword(value.to_string()), length))
+                } else {
+                    Some((tokens::Token::Identifier(value.to_string()), length))
+                }
+            },
+
+            s if re_whitespace.is_match(s) => {
+                None
+            },
+
+            _ => panic!("Unexpected token at {}", cursor)
+        };
+
+        match result {
+            Some((token, length)) => {
+                cursor += length;
+                tokens_vec.push(token);
+            },
+            None => {
+                let captures = re_comment
+                    .captures(&source[cursor..])
+                    .or_else(|| re_whitespace.captures(&source[cursor..]))
+                    .expect("Should have matched a pattern which returns None");
+                cursor += captures.get(0).unwrap().as_str().len();
             }
-            continue;
-        }
-
-        if let Some(token) = re_double_string.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            tokens_vec.push(tokens::Token::StringLiteral(
-                token.get(1).unwrap().as_str().to_string()
-            ));
-            continue;
-        }
-        if let Some(token) = re_keyword_identifier.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            if keywords.contains(token.get(1).unwrap().as_str()) {
-                tokens_vec.push(tokens::Token::Keyword(
-                        token.get(1).unwrap().as_str().to_string()
-                ));
-            } else {
-                tokens_vec.push(tokens::Token::Identifier(
-                        token.get(1).unwrap().as_str().to_string()
-                ));
-            }
-            continue;
-        }
-        if let Some(token) = re_whitespace.captures(&source[cursor..]) {
-            cursor += token.get(0).unwrap().as_str().len();
-            continue;
         }
     }
     tokens_vec
