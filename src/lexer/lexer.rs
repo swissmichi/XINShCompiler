@@ -46,7 +46,7 @@ let keywords: HashSet<&str> = ["num", "float", "text", "bool", "list", "range", 
     let re_comment = Regex::new(r"^#.*\n").unwrap(); 
     let re_whitespace = Regex::new(r"\s+").unwrap();
     let re_delim = Regex::new(r#"^(\[{1,2}|\]{1,2}|\(|\)|\{|\}|,|:|;)"#).unwrap();
-    let re_operator = Regex::new(r"^(=|\+|\-|/|\*|<|>{1,2}|\$|%|\.\.)").unwrap();
+    let re_operator = Regex::new(r"^(=|\+|\-|/|\*|<|>{1,2}|\$|%|\.\.|&|!=|\||&)").unwrap();
     
     let re_num_lit = Regex::new(r"^(-?[0-9]+)").unwrap();
     let re_float_lit = Regex::new(r"^(-?[0-9]+\.[0-9]+)").unwrap();
