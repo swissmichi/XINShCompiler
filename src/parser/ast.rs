@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq)]
 pub enum Lit{
     Int(i64),
     Float(f64),
@@ -7,11 +8,12 @@ pub enum Lit{
     Range(Box<Lit>, Box<Lit>)
 }
 
+#[derive(Debug, PartialEq)]
 pub enum UnOp{
-    Var,
     Not
 }
 
+#[derive(Debug, PartialEq)]
 pub enum BinOp{
     Add,
     Sub,
@@ -28,6 +30,7 @@ pub enum BinOp{
     Or
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Expr {
     Lit(Lit),
     Var(String),
@@ -35,49 +38,58 @@ pub enum Expr {
     Un(UnOp, Box<Expr>),
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Assign {
     pub name: String,
     pub val: Expr,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct CreateVar {
     pub name: String,
     pub wtype: String,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct FuncDef {
     pub name: String,
     pub args: Vec<Expr>,
     pub body: Vec<Stmt>,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct FuncCall {
     pub name: String,
     pub args: Vec<Expr>,
     pub return_to: Option<Expr>,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct ForLoop {
     pub var: String,
     pub body: Vec<Stmt>,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct WhileLoop {
     pub cond: Box<Expr>,
     pub body: Vec<Stmt>,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct IfStmt {
     pub cond: Box<Expr>,
     pub body: Vec<Stmt>,
     pub else_body: Option<Vec<Stmt>>,
 }
 
-pub enum IO_op {
+#[derive(Debug, PartialEq)]
+pub enum IOOp {
     Echo(Vec<Expr>),
     Read(String)
 }
 
+#[derive(Debug, PartialEq)]
 pub enum FileOp {
     Cat(Vec<Expr>),
     Cp(Vec<Expr>, Vec<Expr>),
@@ -86,6 +98,7 @@ pub enum FileOp {
     Overwrite(Vec<Expr>, Vec<Expr>)
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Stmt {
     Assign(Assign),
     CreateVar(CreateVar),
@@ -94,7 +107,7 @@ pub enum Stmt {
     ForLoop(ForLoop),
     WhileLoop(WhileLoop),
     IfStmt(IfStmt),
-    IO(IO_op),
+    IO(IOOp),
     FileOp(FileOp),
     Convert(String, String, Box<Expr>),
     Return(Box<Expr>),
