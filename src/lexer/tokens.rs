@@ -4,7 +4,7 @@
 ///
 /// Make it easier to parse the source code
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     // Single Characters
     Delim(String),

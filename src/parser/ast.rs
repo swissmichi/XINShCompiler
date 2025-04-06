@@ -44,11 +44,6 @@ pub struct Assign {
     pub val: Expr,
 }
 
-#[derive(Debug, PartialEq)]
-pub struct CreateVar {
-    pub name: String,
-    pub wtype: String,
-}
 
 #[derive(Debug, PartialEq)]
 pub struct FuncDef {
@@ -101,7 +96,6 @@ pub enum FileOp {
 #[derive(Debug, PartialEq)]
 pub enum Stmt {
     Assign(Assign),
-    CreateVar(CreateVar),
     FuncDef(FuncDef),
     FuncCall(FuncCall),
     ForLoop(ForLoop),

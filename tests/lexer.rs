@@ -224,44 +224,56 @@ mod lexer_tests {
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral(r"Hello, World\n".to_string()),
 
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral("Enter your name: ".to_string()),
 
+                Token::Delim(";".to_string()),
                 Token::Keyword("read".to_string()),
                 Token::Identifier("name".to_string()),
 
+                Token::Delim(";".to_string()),
                 Token::Keyword("echo".to_string()),
                 Token::Operator("$".to_string()),
                 Token::Identifier("name".to_string()),
 
+                Token::Delim(";".to_string()),
 
                 Token::Identifier("x".to_string()),
                 Token::Operator("=".to_string()),
                 Token::NumLiteral(9),
 
+                Token::Delim(";".to_string()),
                 Token::Identifier("y".to_string()),
                 Token::Operator("=".to_string()),
                 Token::FloatLiteral(9.0),
 
+                Token::Delim(";".to_string()),
                 Token::Identifier("z".to_string()),
                 Token::Operator("=".to_string()),
                 Token::BoolLiteral(true),
 
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("echo".to_string()),
                 Token::Operator("$".to_string()),
                 Token::Identifier("x".to_string()),
 
+                Token::Delim(";".to_string()),
+
 
                 Token::Keyword("echo".to_string()),
                 Token::Operator("$".to_string()),
                 Token::Identifier("y".to_string()),
 
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("echo".to_string()),
                 Token::Operator("$".to_string()),
-                Token::Identifier("z".to_string())
+                Token::Identifier("z".to_string()),
+
+                Token::Delim(";".to_string())
             ]);
         }
 
@@ -272,15 +284,18 @@ mod lexer_tests {
             assert_eq!(tokens, vec![
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral("Write a num: ".to_string()),
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("read".to_string()),
                 Token::Identifier("innum".to_string()),
 
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("text2num".to_string()),
                 Token::Operator("$".to_string()),
                 Token::Identifier("innum".to_string()),
 
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("if".to_string()),
                 Token::Delim("[".to_string()),
@@ -295,12 +310,16 @@ mod lexer_tests {
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral("Yup".to_string()),
                 
+                Token::Delim(";".to_string()),
                 Token::Keyword("else".to_string()),
 
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral("No".to_string()),
 
-                Token::Keyword("fi".to_string())
+                Token::Delim(";".to_string()),
+                Token::Keyword("fi".to_string()),
+
+                Token::Delim(";".to_string())
             ]);
         }
 
@@ -313,6 +332,7 @@ mod lexer_tests {
                 Token::Operator("=".to_string()),
                 Token::NumLiteral(1),
 
+                Token::Delim(";".to_string()),
                 Token::Keyword("while".to_string()),
                 Token::Delim("[".to_string()),
                 Token::Operator("$".to_string()),
@@ -329,6 +349,7 @@ mod lexer_tests {
                 Token::Operator("$".to_string()),
                 Token::Identifier("x".to_string()),
 
+                Token::Delim(",".to_string()),
                 Token::Identifier("x".to_string()),
                 Token::Operator("=".to_string()),
                 Token::Operator("$".to_string()),
@@ -336,7 +357,10 @@ mod lexer_tests {
                 Token::Operator("+".to_string()),
                 Token::NumLiteral(1),
 
-                Token::Keyword("done".to_string())
+                Token::Delim(";".to_string()),
+                Token::Keyword("done".to_string()),
+
+                Token::Delim(";".to_string())
             ]);
         }
 
@@ -366,8 +390,10 @@ mod lexer_tests {
                 Token::Operator("$".to_string()),
                 Token::Identifier("word".to_string()),
 
+                Token::Delim(";".to_string()),
                 Token::Keyword("done".to_string()),
 
+                Token::Delim(";".to_string()),
                 Token::Keyword("for".to_string()),
                 Token::Identifier("i".to_string()),
                 Token::Keyword("in".to_string()),
@@ -385,7 +411,10 @@ mod lexer_tests {
                 Token::Operator("$".to_string()),
                 Token::Identifier("i".to_string()),
 
-                Token::Keyword("done".to_string())
+                Token::Delim(";".to_string()),
+                Token::Keyword("done".to_string()),
+
+                Token::Delim(";".to_string())
             ]);
         }
         
@@ -400,9 +429,9 @@ mod lexer_tests {
 
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral("bar".to_string()),
-
+                Token::Delim(";".to_string()),
                 Token::Delim(r"}".to_string()),
-
+                Token::Delim(";".to_string()),
 
                 Token::Keyword("function".to_string()),
                 Token::Identifier("bar".to_string()),
@@ -416,16 +445,17 @@ mod lexer_tests {
                 Token::Keyword("echo".to_string()),
                 Token::Operator("$".to_string()),
                 Token::Identifier("msg".to_string()),
-
+                Token::Delim(";".to_string()),
                 Token::Delim(r"}".to_string()),
-
+                Token::Delim(";".to_string()),
 
                 Token::Identifier("foo".to_string()),
-                
+                Token::Delim(";".to_string()),              
                 Token::Identifier("bar".to_string()),
                 Token::Delim("[[".to_string()),
                 Token::StringLiteral("hi".to_string()),
-                Token::Delim("]]".to_string())
+                Token::Delim("]]".to_string()),
+                Token::Delim(";".to_string())
             ]);
         }
         
@@ -444,32 +474,32 @@ mod lexer_tests {
 
                 Token::Keyword("cat".to_string()),
                 Token::StringLiteral("file.txt".to_string()),
-               
+                Token::Delim(",".to_string()),              
                 Token::Keyword("cat".to_string()),
                 Token::StringLiteral("Hiiii".to_string()),
                 Token::Operator(">>".to_string()),
                 Token::StringLiteral("file.txt".to_string()),
-                
+                Token::Delim(",".to_string()),               
                 Token::Keyword("cat".to_string()),
                 Token::StringLiteral("Hello".to_string()),
                 Token::Operator(">".to_string()),
                 Token::StringLiteral("file.txt".to_string()),
-
+                Token::Delim(",".to_string()),
                 Token::Keyword("cp".to_string()),
                 Token::StringLiteral("file.txt".to_string()),
                 Token::StringLiteral("hello.txt".to_string()),
-
+                Token::Delim(",".to_string()),
                 Token::Keyword("mv".to_string()),
                 Token::StringLiteral("hello.txt".to_string()),
                 Token::StringLiteral("no.txt".to_string()),
-
+                Token::Delim(";".to_string()),
                 Token::Keyword("else".to_string()),
 
                 Token::Keyword("echo".to_string()),
                 Token::StringLiteral("File does not exist".to_string()),
-
-                Token::Keyword("fi".to_string())
-
+                Token::Delim(";".to_string()),
+                Token::Keyword("fi".to_string()),
+                Token::Delim(";".to_string())
             ]);
         }
 
@@ -481,8 +511,12 @@ mod lexer_tests {
                Token::Keyword("command".to_string()),
                Token::StringLiteral("ls".to_string()),
                
+               Token::Delim(";".to_string()),
+                
                Token::Keyword("command".to_string()),
-               Token::StringLiteral(r#"echo "Hello""#.to_string())
+               Token::StringLiteral(r#"echo "Hello""#.to_string()),
+
+                Token::Delim(";".to_string())
            ]);
         }
     }

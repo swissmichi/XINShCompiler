@@ -1,4 +1,4 @@
 # Shell command calls
 
-command 'ls'
-command 'echo "Hello"'
+command 'ls';
+command 'echo "Hello"';

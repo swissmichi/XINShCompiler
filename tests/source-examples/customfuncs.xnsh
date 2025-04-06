@@ -1,11 +1,11 @@
 # creating and calling functions 
 function foo {
-	echo "bar"
-}
+	echo "bar";
+};
 
 function bar [[msg:text]] {
-	echo $msg
-}
+	echo $msg;
+};
 
-foo
-bar [["hi"]]
+foo;
+bar [["hi"]];

@@ -1,12 +1,12 @@
 # Control flow
 
-echo "Write a num: "
-read innum
+echo "Write a num: ";
+read innum;
 
-text2num $innum
+text2num $innum;
 
 if [ $innum = 2 ]; then
-	echo "Yup"
+	echo "Yup";
 else
-	echo "No"
-fi
+	echo "No";
+fi;

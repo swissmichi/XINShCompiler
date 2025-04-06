@@ -1,15 +1,15 @@
 # XINsh IO
 
-echo "Hello, World\n"
+echo "Hello, World\n";
 
-echo "Enter your name: "
-read name
-echo $name
+echo "Enter your name: ";
+read name;
+echo $name;
 
-x = 9
-y = 9.0
-z = True
+x = 9;
+y = 9.0;
+z = True;
 
-echo $x
-echo $y
-echo $z
+echo $x;
+echo $y;
+echo $z;
