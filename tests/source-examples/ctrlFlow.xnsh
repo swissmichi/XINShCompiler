@@ -5,8 +5,8 @@ read innum;
 
 text2num $innum;
 
-if [ $innum = 2 ]; then
-	echo "Yup";
-else
-	echo "No";
+if [ $innum = 2 ], then,
+	echo "Yup",
+else,
+	echo "No",
 fi;
