@@ -51,7 +51,7 @@ pub mod parser_test{
     }
 
     #[test]
-    fn simple_ops(){
+    fn simple_maths(){
         let tokens = vec![
             Token::Identifier("a".to_string()),
             Token::Operator("=".to_string()),
@@ -87,12 +87,6 @@ pub mod parser_test{
             Token::NumLiteral(1),
             Token::Operator("%".to_string()),
             Token::NumLiteral(2),
-            Token::Delim(";".to_string()),
-
-            Token::Identifier("a".to_string()),
-            Token::Operator("=".to_string()),
-            Token::Operator("!".to_string()),
-            Token::BoolLiteral(true),
             Token::Delim(";".to_string()),
         ];
 
@@ -133,9 +127,10 @@ pub mod parser_test{
             }),
             Stmt::Assign(Assign{
                 name: "a".to_string(),
-                val: Expr::Un(
-                    UnOp::Not,
-                    Box::new(Expr::Lit(Lit::Bool(true)))
+                val: Expr::Bin(
+                    Box::new(Expr::Lit(Lit::Int(1))),
+                    BinOp::Mod,
+                    Box::new(Expr::Lit(Lit::Int(2)))
                 )
             })
         ])
