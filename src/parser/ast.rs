@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq)]
 pub enum Lit{
-    Int(i64),
-    Float(f64),
+    Int(i32),
+    Float(f32),
     Str(String),
     Bool(bool),
     List(Vec<Lit>),
